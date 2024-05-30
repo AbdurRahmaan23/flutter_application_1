@@ -2,8 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/signup.dart';
 import 'package:provider/provider.dart';
-
 import 'auth_service.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,9 +24,9 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Firebase App',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: Colors.red,
         ),
-        home: SignUpPage(),
+        home: SignUpPage(), // Start with the SignInPage
       ),
     );
   }

@@ -1,18 +1,16 @@
-// ignore_for_file: prefer_const_constructors, use_build_context_synchronously, library_private_types_in_public_api, use_key_in_widget_constructors
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'auth_service.dart';
-import 'sign_in.dart';
+import 'home_page.dart';
 
-class SignUpPage extends StatefulWidget {
+class SignInPage extends StatefulWidget {
   @override
-  _SignUpPageState createState() => _SignUpPageState();
+  _SignInPageState createState() => _SignInPageState();
 }
 
-class _SignUpPageState extends State<SignUpPage> {
+class _SignInPageState extends State<SignInPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -22,8 +20,8 @@ class _SignUpPageState extends State<SignUpPage> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.orangeAccent,
-        title: Text('Sign Up'),
+        backgroundColor: Colors.lightBlueAccent,
+        title: Text('Sign In'),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -35,7 +33,7 @@ class _SignUpPageState extends State<SignUpPage> {
               decoration: InputDecoration(
                 suffixIcon: Icon(
                   Icons.mail,
-                  color: Colors.orangeAccent,
+                  color: Colors.lightBlue,
                 ),
                 hintText: "Enter your email",
                 labelText: 'Email',
@@ -50,16 +48,14 @@ class _SignUpPageState extends State<SignUpPage> {
             TextField(
               controller: _passwordController,
               decoration: InputDecoration(
-                suffixIcon: Icon(
-                  Icons.lock,
-                  color: Colors.orangeAccent,
-                ),
-                hintText: "Enter your password",
-                labelText: 'Password',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-              ),
+                  suffixIcon: Icon(
+                    Icons.lock,
+                    color: Colors.lightBlue,
+                  ),
+                  hintText: "Enter your password",
+                  labelText: 'Password',
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30))),
               obscureText: true,
             ),
             SizedBox(height: 20),
@@ -68,21 +64,29 @@ class _SignUpPageState extends State<SignUpPage> {
                 final email = _emailController.text;
                 final password = _passwordController.text;
 
-                User? user = await authService.signUpWithEmail(email, password);
+                User? user = await authService.signInWithEmail(email, password);
                 if (user != null) {
+                  if (!user.emailVerified) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Please verify your email to sign in.'),
+                      ),
+                    );
+                    return;
+                  }
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => HomePage()),
+                  );
+                } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(
-                          'Verification email sent. Please check your inbox.'),
+                      content: Text('Sign in failed. Please try again.'),
                     ),
-                  );
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => SignInPage()),
                   );
                 }
               },
               child: Text(
-                'Sign Up',
+                'Sign In',
                 style: TextStyle(color: Colors.blue),
               ),
             ),

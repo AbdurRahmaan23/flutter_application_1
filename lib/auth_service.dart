@@ -23,6 +23,13 @@ class AuthService {
       UserCredential result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
       User? user = result.user;
+
+      // Check if the user's email is verified
+      if (user != null && !user.emailVerified) {
+        await _auth.signOut();
+        return null;
+      }
+
       return user;
     } catch (e) {
       print(e.toString());
