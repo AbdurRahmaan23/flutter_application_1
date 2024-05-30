@@ -13,8 +13,7 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   @override
-  Widget bu
-  ild(BuildContext context) {
+  Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         Provider<AuthService>(
